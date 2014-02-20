@@ -1,3 +1,95 @@
 = shrinkwrap
 
-TODO - Write a readme.
+== Introduction
+
+Shrinkwrap is a method for packaging repostiories for deployment. 
+
+=== Why shrinkwrap? 
+
+Deploying code can be difficult. Many people will pull code directly off their
+build servers, use a centralized coordinator (like a chef-server), or other
+more complex methods for deployment. shrinkwrap utilizes encryption to permit
+utilization of a CDN to rapidly deploy code bundles.
+
+== Commands
+
+=== wrap
+
+==== Description
+
+The 'wrap' command will do the following:
+
+First, it will run rake or a command you specify to prepare your repository 
+for shrink wrapping. 
+
+Second, it will create a tarball of your repository, encrypt it with a
+provided passphrase, and sign it with a provided gpg private key.
+
+Third, it will upload the bundle to a public Rackspace Cloud Files CDN
+container. It should be trivial to add support later for any fog supported
+object store.
+
+==== Example: Berkshelf+chef-solo repository
+
+Note: Commands given below for ease of understanding. Likely implementation
+will be directly in ruby.
+
+  $ shrinkwrap wrap --name 'chefbundle' chef-repo/
+    -> $ rake pre_shrinkwrap
+      -> # An example pre_shrinkwrap would run the following
+      -> $ rake test
+      -> $ rm -rf cookbooks/
+      -> $ berks vendor cookbooks/
+    -> $ tar czf chefbundle-${GIT_SHA1}.tar.gz
+    -> $ gpg --batch -o chefbundle-${GIT_SHA1}.tar.bz2.gpg --sign chef-bundle-${BUNDLE_ID}.tar.gz
+    -> Now using fog, we will upload this bundle to a public CDN container.
+
+=== unwrap
+
+==== Description
+
+The unwrap command will do the following:
+
+First, it will download the bundle from a provided CDN url. 
+
+Second, it will verify, decrypt, and extract the repository.
+
+Third, it will execute the following command inside the bundle. Ensure it
+exists and is executable inside your bundle. When it is executed CWD will be
+the root of the unwrapped repository.
+
+  $ ./unwrap
+
+==== Example: chef-solo deployment
+
+  $ shrinkwrap unwrap http://domain.tld/chefbundle.tar.gz.gpg /opt/chef-repo/
+    -> Download chefbundle
+    -> Decrypt and verify chefbundle
+    -> Extract chefbundle to /opt/chef-repo
+    -> run: $ ./unwrap.sh
+      -> chef-solo -c some-config.rb -j something.json 
+
+== Development
+
+=== Setting up development environment
+
+Ensure rvm or rbenv is setup. You should automatically use a gemset and proper
+ruby version due to .ruby-version and .ruby-gemset files. 
+
+Install dependencies via bundle:
+  $ bundle install
+
+=== Performing a release
+
+Commit the code to be released. Bump the version -- either major, minor, or 
+patch.
+
+  $ rake version:bump:major 
+  $ rake version:bump:minor
+  $ rake version:bump:patch
+
+Then perform the release.
+
+  $ rake release
+
+Ask jayofdoom if you need access to push this gem to rubygems.
