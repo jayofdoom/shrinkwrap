@@ -1,7 +1,13 @@
 # Encoding: utf-8
-require_relative 'shrinkwrap/cli'
-require_relative 'shrinkwrap/wrap'
-require_relative 'shrinkwrap/unwrap'
+require 'shrinkwrap/logger'
+require 'shrinkwrap/cli'
+require 'shrinkwrap/wrap'
+require 'shrinkwrap/unwrap'
 
 module Shrinkwrap
+  class << self
+    attr_accessor :log
+  end
 end
+
+Shrinkwrap.log = Shrinkwrap::Logger.new(STDOUT)
