@@ -29,7 +29,7 @@ module Shrinkwrap
     end
 
     def tar_and_compress
-      unless @options[:output_prefix].empty?
+      unless @options[:output_prefix].nil?
         options[:output_prefix] == File::basename(@dir)
       end
       # TODO: Implement in ruby instead of system calls
