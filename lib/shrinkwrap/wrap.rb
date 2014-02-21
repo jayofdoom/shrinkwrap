@@ -42,7 +42,7 @@ module Shrinkwrap
         @dir
       ]
 
-      unless @options[:excludes].empty?
+      unless @options[:excludes].nil?
         @options[:excludes].each do |exclude|
           cmd.push('--exclude=' + exclude)
         end
