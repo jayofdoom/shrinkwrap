@@ -29,13 +29,15 @@ module Shrinkwrap
     end
 
     def tar_and_compress
-      unless @options[:output_prefix].nil?
-        options[:output_prefix] == File::basename(@dir)
+      if @options[:output_prefix].nil?
+        output_prefix = File::basename(@dir)
+      else
+        output_prefix = @options[:output_prefix]
       end
       # TODO: Implement in ruby instead of system calls
       # TODO: if git repo; include git sha1. For now expect it to be passed
       # in with output_prefix
-      output_file = @options[:output_prefix] + '.tar.gz'
+      output_file = output_prefix + '.tar.gz'
       cmd = [ 
         'tar czf',
         output_file,
