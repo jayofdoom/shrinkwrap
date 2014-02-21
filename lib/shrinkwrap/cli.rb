@@ -22,7 +22,7 @@ module Shrinkwrap
       :required => false,
       :aliases => '-o',
       :desc => 'String to prefix output file with'
-    method_options :excludes,
+    method_option :excludes,
       :type => :array,
       :required => false,
       :aliases => '-e',
