@@ -1,0 +1,11 @@
+HashSyntax:
+  EnforcedStyle: hash_rockets
+
+LineEndConcatenation:
+  Enabled: false
+
+Encoding:
+  Enabled: false
+
+NumericLiterals:
+  Enabled: false

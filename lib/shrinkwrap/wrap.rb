@@ -12,32 +12,53 @@ module Shrinkwrap
       @options = options
     end
 
-    def log
-      require 'logger'
-      # TODO: Share logger between classes
-      @log ||= Logger.new(STDOUT)
-    end
-
     def prepare_for_wrap
+      # TODO: Implement in ruby instead of system calls
       Dir.chdir(@dir) do
         if system(@options[:precommand])
-          log.info('Successfully executed ' +
+          Shrinkwrap.log.info('Successfully executed ' +
                    @options[:precommand] +
                    ' in ' +
                    @dir)
         else
-          # Probably want our own errorclass?
-          raise SystemError, "Precommand failed #{$?}"
+          Shrinkwrap.log.fatal!('Precommand failed: ' + $?)
         end
       end
 
-      log.info("Prepared #{@dir} for wrapping!")
+      Shrinkwrap.log.info("Prepared #{@dir} for wrapping!")
     end
 
     def tar_and_compress
-      puts 'tar and compress!'
-      # options[:dir] is the dir to compress
-      # should return the path to the filename it created
+      unless @options[:output_prefix].empty?
+        options[:output_prefix] == File::basename(@dir)
+      end
+      # TODO: Implement in ruby instead of system calls
+      # TODO: if git repo; include git sha1. For now expect it to be passed
+      # in with output_prefix
+      output_file = @options[:output_prefix] + '.tar.gz'
+      cmd = [ 
+        'tar czf',
+        output_file,
+        @dir
+      ]
+
+      unless @options[:excludes].empty?
+        @options[:excludes].each |exclude| do
+          cmd.push('--exclude=' + exclude)
+        end
+      end
+
+      Dir.chdir(File.expand_path(@dir, '..')) do
+        if system(cmd.join(' '))
+          Shrinkwrap.log.info('Successfully created bundle at' +
+                              File::join(Dir.pwd + output_file).to_s)
+        else
+          Shrinkwrap.log.fatal!('Error executing: ' +
+                                cmd.join(' ') +
+                                ' exited with status ' +
+                                $?)
+
+      end
     end
 
     def encrypt_and_sign

@@ -17,10 +17,16 @@ module Shrinkwrap
       :type => :string,
       :default => 'rake pre_shrinkwrap',
       :aliases => '-p'
-    method_option :output_file,
+    method_option :output_prefix,
       :type => :string,
-      :required => true,
-      :aliases => '-o'
+      :required => false,
+      :aliases => '-o',
+      :desc => 'String to prefix output file with'
+    method_options :excludes,
+      :type => :array,
+      :required => false,
+      :aliases => '-e',
+      :desc => 'paths to exclude from the bundle'
     desc 'wrap', 'Shrinkwraps up a bundle for deployment'
     def wrap(dir)
       #TODO: Not have to set this in every separate method?
@@ -30,8 +36,6 @@ module Shrinkwrap
         raise(ArgumentError, "#{fulldir} must exist")
       end
       
-      # Verify options[:dir] exists
-      # Verify options[:tmpdir] exists
       wrapper = Shrinkwrap::Wrap.new(fulldir, options)
       wrapper.prepare_for_wrap
       wrapper.tar_and_compress
