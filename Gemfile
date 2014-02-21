@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 gem 'thor'
 
 group :development do
@@ -8,4 +8,5 @@ group :development do
   gem 'jeweler', '~> 2.0.1'
   gem 'simplecov', '>= 0'
   gem 'rubocop'
+  gem 'pry'
 end

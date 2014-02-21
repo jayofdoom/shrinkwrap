@@ -25,15 +25,28 @@ module Shrinkwrap
     def wrap(dir)
       #TODO: Not have to set this in every separate method?
       log.level = Logger::DEBUG if options[:verbose]
-      if Dir::exists?(options[:dir])
-        raise(ArgumentError, "#{options[:dir]} must exist")
+      fulldir = File.expand_path(dir)
+      unless Dir::exists?(fulldir)
+        raise(ArgumentError, "#{fulldir} must exist")
       end
       
       # Verify options[:dir] exists
       # Verify options[:tmpdir] exists
-      Shrinkwrap::wrap.prepare_for_wrap(options[:dir], options[:precommand])
-      tarball = Shrinkwrap::wrap.tar_and_compress(dir, options)
-      Shrinkwrap::wrap.encrypt_and_sign(tarball, options)
+      wrapper = Shrinkwrap::Wrap.new(fulldir, options)
+      wrapper.prepare_for_wrap
+      wrapper.tar_and_compress
+      wrapper.encrypt_and_sign
+    end
+
+    method_option :postcommand,
+      :type => :string,
+      :default => './unwrap.sh',
+      :aliases => '-p',
+      :required => false
+    desc 'unwrap', 'Unwraps a deployment bundle'
+    def unwrap(bundle)
+      #TODO: everything
+      puts 'unwrapped'
     end
   end
 end
