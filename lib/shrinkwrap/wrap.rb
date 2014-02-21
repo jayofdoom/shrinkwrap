@@ -57,7 +57,7 @@ module Shrinkwrap
                                 cmd.join(' ') +
                                 ' exited with status ' +
                                 $?)
-
+        end
       end
     end
 
