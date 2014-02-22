@@ -17,20 +17,9 @@ Gem::Specification.new do |s|
     "LICENSE.txt",
     "README.rdoc"
   ]
-  s.files = [
-    ".document",
-    ".ruby-gemset",
-    ".ruby-version",
-    "Gemfile",
-    "Gemfile.lock",
-    "LICENSE.txt",
-    "README.rdoc",
-    "Rakefile",
-    "VERSION",
-    "lib/shrinkwrap.rb",
-    "test/helper.rb",
-    "test/test_shrinkwrap.rb"
-  ]
+  s.executables << 'shrinkwrap'
+  s.files = `git ls-files`.split($\)
+  s.bindir = 'bin'
   s.homepage = "http://github.com/jayofdoom/shrinkwrap"
   s.licenses = ["Apache 2.0"]
   s.require_paths = ["lib"]
@@ -60,5 +49,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<jeweler>, ["~> 2.0.1"])
     s.add_dependency(%q<simplecov>, [">= 0"])
   end
+  s.add_dependency(%q<thor>)
+  s.add_dependency(%q<open4>)
 end
 

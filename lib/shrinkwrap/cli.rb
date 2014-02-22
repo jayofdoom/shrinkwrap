@@ -29,8 +29,6 @@ module Shrinkwrap
       :desc => 'paths to exclude from the bundle'
     desc 'wrap', 'Shrinkwraps up a bundle for deployment'
     def wrap(dir)
-      #TODO: Not have to set this in every separate method?
-      log.level = Logger::DEBUG if options[:verbose]
       fulldir = File.expand_path(dir)
       unless Dir::exists?(fulldir)
         raise(ArgumentError, "#{fulldir} must exist")
