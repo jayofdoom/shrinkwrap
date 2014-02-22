@@ -12,6 +12,7 @@ module Shrinkwrap
     end
 
     def runner(dir, cmd, verbose=false)
+      log.info('Executing: ' + cmd + ' in ' + dir)
       Dir.chdir(dir) do
         pid, stdin, stdout, stderr = Open4::popen4(cmd)
         stdin.close
@@ -21,6 +22,8 @@ module Shrinkwrap
           stderr.each { |err| log.error(err.chomp) }
           log.info(cmd + ' exited with status ' + status.to_s)
           exit 1 if status != 0
+        else
+          log.info(cmd + ' completed successfully!')
         end
       end
     end

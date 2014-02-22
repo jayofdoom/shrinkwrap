@@ -42,20 +42,22 @@ module Shrinkwrap
       end
 
       output_dir = File.expand_path('..', @dir)
+      
       Shrinkwrap.runner(output_dir, cmd.join(' '), @options[:verbose])
 
       # TODO: Find a better way to pass this information around? Maybe don't 
       # even write the tarball to disk before encryption?
       @tarball = File.join(output_dir, output_file)
 
-      unless File::exists?(@tarball)
+      if File::exists?(@tarball)
+        Shrinkwrap::log.info(@tarball + ' created successfully!')
+      else
         Shrinkwrap::log.fatal!('Cannot find created tarball at ' + @tarball)
       end
     end
 
     def encrypt_and_sign
-      puts 'Encrypting ' + @tarball
-      puts 'not really'
+      Shrinkwrap::log.error('ENCRYPTION NOT IMPLEMENTED')
     end
   end
 end
