@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 gem 'thor'
 gem 'open4'
+gem 'yell'
 
 group :development do
   gem 'shoulda', '>= 0'
