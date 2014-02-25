@@ -6,11 +6,7 @@ require 'shrinkwrap/unwrap'
 
 module Shrinkwrap
   class << self
-
-    def log
-      @@log ||= Shrinkwrap::Logger.new(STDOUT)
-    end
-
+    include Shrinkwrap::Logging
     def runner(dir, cmd, verbose=false)
       log.info('Executing: ' + cmd + ' in ' + dir)
       Dir.chdir(dir) do
