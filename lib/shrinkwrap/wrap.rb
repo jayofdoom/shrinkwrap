@@ -3,7 +3,7 @@ require 'open4'
 
 module Shrinkwrap
   class Wrap
-    
+   include Shrinkwrap::Logging
     def initialize(dir, options)
       @dir = dir
       @options = options
@@ -11,7 +11,7 @@ module Shrinkwrap
 
     def prepare_for_wrap
       Shrinkwrap.runner(@dir, @options[:precommand], @options[:verbose])
-      Shrinkwrap.log.info('Prepared ' + @dir + ' for wrapping!')
+      log.info('Prepared ' + @dir + ' for wrapping!')
     end
 
     def tar_and_compress
@@ -50,14 +50,14 @@ module Shrinkwrap
       @tarball = File.join(output_dir, output_file)
 
       if File::exists?(@tarball)
-        Shrinkwrap::log.info(@tarball + ' created successfully!')
+        log.info(@tarball + ' created successfully!')
       else
-        Shrinkwrap::log.fatal!('Cannot find created tarball at ' + @tarball)
+        log.fatal!('Cannot find created tarball at ' + @tarball)
       end
     end
 
     def encrypt_and_sign
-      Shrinkwrap::log.error('ENCRYPTION NOT IMPLEMENTED')
+      log.error('ENCRYPTION NOT IMPLEMENTED')
     end
   end
 end
