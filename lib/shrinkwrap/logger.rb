@@ -1,7 +1,17 @@
-require 'logger'
+require 'yell'
 
 module Shrinkwrap
-  class Logger < Logger
+  module Logging
+    def log
+      Shrinkwrap::Logging.logger
+    end
+    class << self
+      attr_accessor :logger
+    end
+  end
+
+  # Custom logger class allows us to exit with a bang
+  class Logger < Yell::Logger
     def fatal!(msg)
       self.fatal(msg)
       exit(1)
