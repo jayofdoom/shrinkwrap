@@ -1,5 +1,7 @@
 = shrinkwrap
 
+THIS PROJECT HAS BEEN UNMAINTAINED FOR YEARS. DO NOT USE IT.
+
 == Introduction
 
 Shrinkwrap is a method for packaging repostiories for deployment. 
